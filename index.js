@@ -49,8 +49,7 @@ function Stream(streamId, writeToken, readToken){
 }
 
 function Lib1self(c){
-	var self = this
-	, config = {
+	config = {
 		server: 'http://sandbox.1self.co'
 	};
 
@@ -67,7 +66,7 @@ function Lib1self(c){
 	config.appSecret = c.appSecret;
 	config.server = c.server === undefined ? config.server : c.server;
 
-	self.createStream = function(callback, error) {
+	this.createStream = function(callback, error) {
 		request({
             method: 'POST'
             , uri: config.server + '/v1/streams'

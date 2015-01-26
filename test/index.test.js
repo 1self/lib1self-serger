@@ -1,4 +1,4 @@
-var Lib1self = require('../').Lib1self
+var Lib1self = require('../').Lib1selfserver
 , chai = require('chai')
 , expect = chai.expect
 , nock = require('nock');

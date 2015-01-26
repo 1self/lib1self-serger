@@ -48,7 +48,7 @@ function Stream(streamId, writeToken, readToken){
 	}
 }
 
-function Lib1self(c){
+function Lib1selfserver(c){
 	config = {
 		server: 'http://sandbox.1self.co'
 	};
@@ -88,4 +88,4 @@ function Lib1self(c){
 	}
 }
 
-exports.Lib1self = Lib1self;
+exports.Lib1selfserver = Lib1selfserver;

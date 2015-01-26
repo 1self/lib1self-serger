@@ -10,3 +10,10 @@ deploy:
     tags: true
     repo: 1self/lib1self-server
     all_branches: true
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/2a5a368d80efd6c35282
+    on_success: change  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: false     # default: false

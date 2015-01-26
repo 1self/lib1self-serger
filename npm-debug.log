@@ -1,0 +1,30 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'run', 'test' ]
+2 info using npm@1.4.14
+3 info using node@v0.10.28
+4 verbose node symlink /usr/local/bin/node
+5 verbose run-script [ 'pretest', 'test', 'posttest' ]
+6 info pretest lib1self@0.0.0
+7 verbose unsafe-perm in lifecycle true
+8 info test lib1self@0.0.0
+9 verbose unsafe-perm in lifecycle true
+10 info posttest lib1self@0.0.0
+11 verbose unsafe-perm in lifecycle true
+12 info lib1self@0.0.0 Failed to exec posttest script
+13 error lib1self@0.0.0 posttest: `istanbul check-coverage --statements 85 --branches 70 --functions 100 --lines 90 && rm -rf coverage`
+13 error Exit status 8
+14 error Failed at the lib1self@0.0.0 posttest script.
+14 error This is most likely a problem with the lib1self package,
+14 error not with npm itself.
+14 error Tell the author that this fails on your system:
+14 error     istanbul check-coverage --statements 85 --branches 70 --functions 100 --lines 90 && rm -rf coverage
+14 error You can get their info via:
+14 error     npm owner ls lib1self
+14 error There is likely additional logging output above.
+15 error System Darwin 13.4.0
+16 error command "node" "/usr/local/bin/npm" "run" "test"
+17 error cwd /Users/edwardsykes1/source/lib1self
+18 error node -v v0.10.28
+19 error npm -v 1.4.14
+20 error code ELIFECYCLE
+21 verbose exit [ 1, true ]

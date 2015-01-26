@@ -1,0 +1,40 @@
+{
+  "name": "lib1self-server",
+  "description": "javascript library that wraps the 1self api providing a idiomatic javascript experience",
+  "version": "0.0.0",
+  "dependencies": {
+    "request": "^2.51.0"
+  },
+  "watch": {
+    "test": "{index.js,test/*.js}"
+  },
+  "scripts": {
+    "lint": "jshint .",
+    "checkStyle": "jscs .",
+    "pretest": "npm run-script lint && npm run-script checkStyle",
+    "test": "istanbul cover ./node_modules/.bin/_mocha test",
+    "posttest": "istanbul check-coverage --statements 85 --branches 70 --functions 100 --lines 90 && rm -rf coverage",
+    "prepublish": "npm test && npm prune",
+    "watch": "npm-watch"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org"
+  },
+  "author": "ed sykes <ed.sykes@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-watch": "^0.6.1",
+    "istanbul": "^0.3.2",
+    "jscs": "^1.6.1",
+    "jshint": "^2.5.6",
+    "mocha": "^1.21.4",
+    "nock": "^0.57.0",
+    "npm-watch": "0.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:1self/lib1self-server.git"
+  }
+}

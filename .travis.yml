@@ -1,6 +1,11 @@
 language: node_js
 node_js:
-  - 0.10
-before_script:
-  - npm version patch
-  - git push origin master
+- 0.1
+deploy:
+  provider: npm
+  email: ed.sykes@gmail.com
+  api_key:
+    secure: Pbg3myj+X9w5gqWZ6uU1SnOxHI1M3/5fze7GbAP3C39pjeMFCJOmB20IOLt+BIwnSwPY/lJCCaew0C7nGDFXTIf/urtNvgOamzD3ST8j2YgPTNssBVSyinbhEP1hhQ1qrQ4lU7tmEfvyg+Qizw3wlduxsOVB/bG8qpJMqw03roo=
+  on:
+    tags: true
+    repo: 1self/lib1self-server

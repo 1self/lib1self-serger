@@ -9,3 +9,4 @@ deploy:
   on:
     tags: true
     repo: 1self/lib1self-server
+    all_branches: true

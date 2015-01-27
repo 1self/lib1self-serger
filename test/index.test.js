@@ -1,4 +1,4 @@
-var Lib1self = require('../').Lib1selfserver
+var lib1self = require('../')
 , chai = require('chai')
 , expect = chai.expect
 , nock = require('nock');
@@ -20,43 +20,46 @@ describe('lib1self', function () {
   // })
 
   /*jshint -W031 */
-  it('checks that config has been passed', function () {
-  	expect(Lib1self).to.throw(/config object must be defined/);
+  it('createStream checks that config has been passed', function () {
+    var createStreamCall = function() {
+      lib1self.createStream();
+    };
+  	expect(createStreamCall).to.throw(/config object must be defined/);
   })
 
-  it('checks that appId is set', function () {
+  it('createStream checks that appId is set', function () {
   	var appIdNotSet = function () {
-  		new Lib1self({});
+  		lib1self.createStream({});
   	}
   	expect(appIdNotSet).to.throw(/appId/);
   })
 
-  it('checks that appSecret is set', function () {
+  it('createStream checks that appSecret is set', function () {
 	var config = {
 		appId: ''
 	}
 	,constructorCall = function () {
-  		new Lib1self(config);
+  		lib1self.createStream(config);
   	}
   	expect(constructorCall).to.throw(/appSecret/);
   })
 
-  it('constructs lib1self', function () {
-		var config = {
-		appId: ''
-		, appSecret: ''
-	}
-	,constructorCall = function () {
-  		new Lib1self(config);
-  	};
-
-  	expect(constructorCall);
+  it('createStream checks that callbackUrl is set', function () {
+  var config = {
+    appId: ''
+    , appSecret: ''
+  }
+  ,constructorCall = function () {
+      lib1self.createStream(config);
+    }
+    expect(constructorCall).to.throw(/callbackUrl/);
   })
 
-  it('constructs lib1self', function (done) {
+  it('createStream call posts on api', function (done) {
 	var config = {
-		appId: ''
-		, appSecret: ''
+		appId: 'appid'
+		, appSecret: 'appsecret'
+    , callbackUrl: 'callback'
 	};
 
   	nock('http://sandbox.1self.co')
@@ -69,13 +72,47 @@ describe('lib1self', function () {
 	              		}
 	                 );
 
-    var lib1self = new Lib1self(config)
-    , success = function (stream) {
-    	console.log(stream);
+    var success = function () {
     	done();
     }
 
-    lib1self.createStream(success, function () {})
+    lib1self.createStream(config, success)
+  })
+
+  it('visualize creates a barcahrt url', function (done) {
+  var config = {
+    appId: 'appid'
+    , appSecret: 'appsecret'
+    , callbackUrl: 'callback'
+    , server: 'http://example.com'
+  };
+
+    nock('http://example.com')
+                  .post('/v1/streams')
+                  .reply(200
+                   , {
+                      streamId: '12345678'
+                      , writeToken: 'wt'
+                      , readToken: 'rt'
+                      , callbackUrl: 'callback'
+                    }
+                   );
+    lib1self.createStream(config, function (error, stream) {
+
+      /*jslint maxlen: 180 */
+      var expectedUrl = 'http://example.com/v1/streams/12345678/events/otag1,otag2/atag1,atag2/count/daily/barchart?readToken=rt&bgColor=000000'
+      /*jslint maxlen: 130 */
+      , barchartUrl = stream.visualize()
+                              .objectTags([ 'otag1', 'otag2' ])
+                              .actionTags([ 'atag1', 'atag2' ])
+                              .count()
+                              .barChart()
+                              .background('000000')
+                              .url();
+      expect(barchartUrl).
+      to.equal(expectedUrl);
+      done();
+    })
   })
 
 })

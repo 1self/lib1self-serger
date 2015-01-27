@@ -1,13 +1,13 @@
-var request = require('request'),
-	config = {};
+var request = require('request')
+	, config = {};
 
 exports.sandbox = 'http://sandbox.1self.co';
 exports.production = 'https://api.1self.co';
 
 function Stream(streamId, writeToken, readToken) {
-	var s = streamId,
-		w = writeToken,
-		r = readToken;
+	var s = streamId
+		, w = writeToken
+		, r = readToken;
 
 	this.send = function(event, callback) {
 		if (event.objectTags === undefined) {
@@ -19,15 +19,16 @@ function Stream(streamId, writeToken, readToken) {
 		}
 
 		request({
-			method: 'POST',
-			uri: config.server + '/v1/streams/' + s,
-			gzip: true,
-			headers: {
-				'Authorization': w,
-				'Content-type': 'application/json'
-			},
-			body: event
-		}, function(e, response, body) {
+			method: 'POST'
+			, uri: config.server + '/v1/streams/' + s
+			, gzip: true
+			, headers: {
+				'Authorization': w
+				, 'Content-type': 'application/json'
+			}
+			, body: event
+		}
+		, function(e, response, body) {
 			if (e) {
 				callback(e);
 			}
@@ -39,9 +40,9 @@ function Stream(streamId, writeToken, readToken) {
 
 	this.toJSON = function() {
 		var result = {
-			streamId: s,
-			writeToken: w,
-			readToken: r
+			streamId: s
+			, writeToken: w
+			, readToken: r
 		};
 
 		return JSON.stringify(result);
@@ -68,10 +69,10 @@ function Lib1selfserver(c) {
 
 	this.createStream = function(callback) {
 		request({
-			method: 'POST',
-			uri: config.server + '/v1/streams',
-			gzip: true,
-			headers: {
+			method: 'POST'
+			, uri: config.server + '/v1/streams'
+			, gzip: true
+			, headers: {
 				'Authorization': config.appId + ':' + config.appSecret
 			}
 		}, function(e, response, body) {

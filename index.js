@@ -1,5 +1,4 @@
-var request = require('request')
-	, config = {};
+var request = require('request');
 
 exports.sandbox = 'http://sandbox.1self.co';
 exports.production = 'https://api.1self.co';
@@ -93,7 +92,14 @@ function Visualization(apiEndpoint, streamId, writeToken, readToken){
 }
 
 function Stream(apiServer, streamId, writeToken, readToken, callbackUrl) {
-	this.send = function(event, callback) {
+	var self = this;
+	self.apiServer = apiServer;
+	self.streamId = streamId;
+	self.writeToken = writeToken;
+	self.readToken = readToken;
+	self.callbackUrl = callbackUrl;
+
+	self.send = function(event, callback) {
 		if (event.objectTags === undefined) {
 			throw 'object tags must be specified';
 		} else if (event.actionTags === undefined) {
@@ -104,12 +110,13 @@ function Stream(apiServer, streamId, writeToken, readToken, callbackUrl) {
 
 		request({
 			method: 'POST'
-			, uri: config.server + '/v1/streams/' + streamId
+			, uri: self.apiServer + '/v1/streams/' + streamId + '/events'
 			, gzip: true
 			, headers: {
 				'Authorization': writeToken
 				, 'Content-type': 'application/json'
 			}
+			, json: true
 			, body: event
 		}
 		, function(e, response, body) {
@@ -118,7 +125,7 @@ function Stream(apiServer, streamId, writeToken, readToken, callbackUrl) {
 			}
 
 			console.log('Logged the event');
-			callback(null, JSON.parse(body));
+			callback(null, body);
 		})
 	};
 
@@ -178,4 +185,11 @@ function createStream (config, callback) {
 	})
 }
 
+function loadStream (config, streamId, writeToken, readToken) {
+	config.server = (config.server === undefined) ? 'http://sandbox.1self.co' : config.server;
+	var stream = new Stream(config.server, streamId, writeToken, readToken);
+	return stream;
+}
+
 exports.createStream = createStream;
+exports.loadStream = loadStream;

@@ -115,4 +115,48 @@ describe('lib1self', function () {
     })
   })
 
+  it('loads a stream', function () {
+    var config = {
+      server: 'http://example.com'
+    }
+    , stream = lib1self.loadStream(config, 'sid', 'wt', 'rt');
+        expect(stream.apiServer).to.equal('http://example.com');
+        expect(stream.streamId).to.equal('sid');
+        expect(stream.writeToken).to.equal('wt');
+        expect(stream.readToken).to.equal('rt');
+  })
+
+  it('sends an event', function (done) {
+    var config = {
+      server: 'http://example.com'
+    }
+    nock('http://example.com'
+      , { reqheaders: {
+                    'Authorization': 'wt'
+                    , 'Content-Type': 'application/json'
+                  } })
+                  .post('/v1/streams/12345678/events')
+                  .reply(200
+                   , {
+                      streamid: '12345678'
+                      , writeToken: 'wt'
+                      , readToken: 'rt'
+                    }
+                   );
+    var stream = lib1self.loadStream(config, '12345678', 'wt', 'rt')
+    , event = {
+      objectTags: [ 'otest' ]
+      , actionTags: [ 'atest' ]
+      , properties:{
+        value: 1
+      }
+    };
+
+    stream.send(event, function(error, stream) {
+      expect(error).to.equal(null);
+      expect(stream.streamid === '12345678');
+      done();
+    })
+  })
+
 })

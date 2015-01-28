@@ -173,7 +173,7 @@ function createStream (config, callback) {
 
 		console.log('body');
 		console.log(body);
-		var stream = new Stream(config.server, body.streamId, body.writeToken, body.readToken, body.callbackUrl);
+		var stream = new Stream(config.server, body.streamid, body.writeToken, body.readToken, body.callbackUrl);
 		callback(null, stream);
 	})
 }

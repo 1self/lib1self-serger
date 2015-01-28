@@ -66,7 +66,7 @@ describe('lib1self', function () {
 	                .post('/v1/streams')
 	                .reply(200
 	            	   , {
-	              			streamId: '12345678'
+	              			streamid: '12345678'
 	              			, writeToken: 'wt'
 	              			, readToken: 'rt'
 	              		}
@@ -91,7 +91,7 @@ describe('lib1self', function () {
                   .post('/v1/streams')
                   .reply(200
                    , {
-                      streamId: '12345678'
+                      streamid: '12345678'
                       , writeToken: 'wt'
                       , readToken: 'rt'
                       , callbackUrl: 'callback'

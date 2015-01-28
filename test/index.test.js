@@ -159,4 +159,33 @@ describe('lib1self', function () {
     })
   })
 
+  it('processes a 404 as stream not found', function (done) {
+    var config = {
+      server: 'http://example.com'
+    }
+    nock('http://example.com'
+      , { reqheaders: {
+                    'Authorization': 'wt'
+                    , 'Content-Type': 'application/json'
+                  } })
+                  .post('/v1/streams/12345678/events')
+                  .reply(404
+                   , 'stream not found'
+                   );
+    var stream = lib1self.loadStream(config, '12345678', 'wt', 'rt')
+    , event = {
+      objectTags: [ 'otest' ]
+      , actionTags: [ 'atest' ]
+      , properties:{
+        value: 1
+      }
+    };
+
+    stream.send(event, function(error) {
+      console.log(stream.sendCodes.STREAM_NOT_FOUND);
+      expect(error).to.equal(stream.sendCodes.STREAM_NOT_FOUND);
+      done();
+    })
+  })
+
 })

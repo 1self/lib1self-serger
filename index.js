@@ -99,6 +99,11 @@ function Stream(apiServer, streamId, writeToken, readToken, callbackUrl) {
 	self.readToken = readToken;
 	self.callbackUrl = callbackUrl;
 
+	self.sendCodes = {
+		SEND_ERROR: 'couldn\' send event'
+		, STREAM_NOT_FOUND: 'stream not found, check streamid and writeToken'
+	}
+
 	self.send = function(event, callback) {
 		if (event.objectTags === undefined) {
 			throw 'object tags must be specified';
@@ -121,10 +126,15 @@ function Stream(apiServer, streamId, writeToken, readToken, callbackUrl) {
 		}
 		, function(e, response, body) {
 			if (e) {
-				callback(e);
+				callback(self.sendCodes.SEND_ERROR, e);
+				return;
 			}
 
-			console.log('Logged the event');
+			if (response.statusCode === 404) {
+				callback(self.sendCodes.STREAM_NOT_FOUND, response)
+				return;
+			}
+
 			callback(null, body);
 		})
 	};
@@ -174,14 +184,8 @@ function createStream (config, callback) {
 			callbackUrl: config.callbackUrl
 		}
 	}, function(e, response, body) {
-		if (e) {
-			callback(e);
-		}
-
-		console.log('body');
-		console.log(body);
 		var stream = new Stream(config.server, body.streamid, body.writeToken, body.readToken, body.callbackUrl);
-		callback(null, stream);
+		callback(e, stream);
 	})
 }
 

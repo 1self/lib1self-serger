@@ -196,12 +196,12 @@ describe('lib1self', function () {
       , { reqheaders: {
                     'Authorization': 'wt'
                   } })
-                  .post('/sync?username=fred&lastSyncDate=0&streamid=12345678')
+                  .post('/sync?username=fred&lastSyncDate=2014-01-01T12:00&streamid=12345678')
                   .reply(200
                    , {}
                    );
-    /*jslint maxlen: 180 */
-    var stream = lib1self.loadStream(config, '12345678', 'wt', 'rt', 'http://example.com/sync?username=fred&lastSyncDate={{lastSyncDate}}&streamid={{streamid}}');
+    /*jslint maxlen: 250 */
+    var stream = lib1self.loadStream(config, '12345678', 'wt', 'rt', 'http://example.com/sync?username=fred&lastSyncDate={{lastSyncDate}}&streamid={{streamid}}', '2014-01-01T12:00');
     /*jslint maxlen: 130 */
 
     stream.sync(function(error) {

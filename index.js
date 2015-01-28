@@ -91,13 +91,14 @@ function Visualization(apiEndpoint, streamId, writeToken, readToken){
     };
 }
 
-function Stream(apiServer, streamId, writeToken, readToken, callbackUrl) {
+function Stream(apiServer, streamId, writeToken, readToken, callbackUrl, lastSyncDate) {
 	var self = this;
 	self.apiServer = apiServer;
 	self.streamId = streamId;
 	self.writeToken = writeToken;
 	self.readToken = readToken;
 	self.callbackUrl = callbackUrl;
+	self.lastSyncDate = lastSyncDate;
 
 	self.sendCodes = {
 		SEND_ERROR: 'couldn\' send event'
@@ -145,9 +146,10 @@ function Stream(apiServer, streamId, writeToken, readToken, callbackUrl) {
 
 	self.sync = function(callback) {
 
-		var callbackUrl = self.callbackUrl.replace('{{lastSyncDate}}', 0);
+		var callbackUrl = self.callbackUrl.replace('{{lastSyncDate}}', self.lastSyncDate);
 		callbackUrl = callbackUrl.replace('{{streamid}}', self.streamId);
 
+		console.log(callbackUrl);
 		request({
 			method: 'POST'
 			, uri: callbackUrl
@@ -221,9 +223,9 @@ function createStream (config, callback) {
 	})
 }
 
-function loadStream (config, streamId, writeToken, readToken, callbackUrl) {
+function loadStream (config, streamId, writeToken, readToken, callbackUrl, lastSyncDate) {
 	config.server = (config.server === undefined) ? 'http://sandbox.1self.co' : config.server;
-	var stream = new Stream(config.server, streamId, writeToken, readToken, callbackUrl);
+	var stream = new Stream(config.server, streamId, writeToken, readToken, callbackUrl, lastSyncDate);
 	return stream;
 }
 

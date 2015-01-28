@@ -1,7 +1,7 @@
 {
   "name": "lib1self-server",
   "description": "javascript library that wraps the 1self api providing a idiomatic javascript experience",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "dependencies": {
     "request": "^2.51.0"
   },

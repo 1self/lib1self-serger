@@ -218,7 +218,12 @@ function createStream (config, callback) {
 			callbackUrl: config.callbackUrl
 		}
 	}, function(e, response, body) {
-		var stream = new Stream(config.server, body.streamid, body.writeToken, body.readToken, body.callbackUrl);
+		var stream = new Stream(config.server
+			, body.streamid
+			, body.writeToken
+			, body.readToken
+			, body.callbackUrl
+			, '1980-01-01T00:00:00');
 		callback(e, stream);
 	})
 }

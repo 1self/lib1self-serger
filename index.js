@@ -102,7 +102,7 @@ function Stream(apiServer, streamId, writeToken, readToken, callbackUrl) {
 	self.sendCodes = {
 		SEND_ERROR: 'couldn\' send event'
 		, STREAM_NOT_FOUND: 'stream not found, check streamid and writeToken'
-	}
+	};
 
 	self.send = function(event, callback) {
 		if (event.objectTags === undefined) {
@@ -132,6 +132,38 @@ function Stream(apiServer, streamId, writeToken, readToken, callbackUrl) {
 
 			if (response.statusCode === 404) {
 				callback(self.sendCodes.STREAM_NOT_FOUND, response)
+				return;
+			}
+
+			callback(null, body);
+		})
+	};
+
+	self.syncCodes = {
+		SYNC_ERROR: 'calling sync url failed'
+	}
+
+	self.sync = function(callback) {
+
+		var callbackUrl = self.callbackUrl.replace('{{lastSyncDate}}', 0);
+		callbackUrl = callbackUrl.replace('{{streamid}}', self.streamId);
+
+		request({
+			method: 'POST'
+			, uri: callbackUrl
+			, gzip: true
+			, headers: {
+				'Authorization': writeToken
+			}
+		}
+		, function(e, response, body) {
+			if (e) {
+				callback(self.sendCodes.SYNC_ERROR, e);
+				return;
+			}
+
+			if (response.statusCode !== 200) {
+				callback(self.syncCodes.SYNC_ERROR, response)
 				return;
 			}
 
@@ -189,9 +221,9 @@ function createStream (config, callback) {
 	})
 }
 
-function loadStream (config, streamId, writeToken, readToken) {
+function loadStream (config, streamId, writeToken, readToken, callbackUrl) {
 	config.server = (config.server === undefined) ? 'http://sandbox.1self.co' : config.server;
-	var stream = new Stream(config.server, streamId, writeToken, readToken);
+	var stream = new Stream(config.server, streamId, writeToken, readToken, callbackUrl);
 	return stream;
 }
 

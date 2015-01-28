@@ -188,4 +188,26 @@ describe('lib1self', function () {
     })
   })
 
+  it('syncs to a callback url', function (done) {
+    var config = {
+      server: 'http://example.com'
+    }
+    nock('http://example.com'
+      , { reqheaders: {
+                    'Authorization': 'wt'
+                  } })
+                  .post('/sync?username=fred&lastSyncDate=0&streamid=12345678')
+                  .reply(200
+                   , {}
+                   );
+    /*jslint maxlen: 180 */
+    var stream = lib1self.loadStream(config, '12345678', 'wt', 'rt', 'http://example.com/sync?username=fred&lastSyncDate={{lastSyncDate}}&streamid={{streamid}}');
+    /*jslint maxlen: 130 */
+
+    stream.sync(function(error) {
+      expect(error).to.equal(null);
+      done();
+    })
+  })
+
 })

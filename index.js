@@ -222,6 +222,7 @@ function createStream (config, callback) {
 		console.log(e);
 		if (response.statusCode === 401) {
 			callback('auth error: check your appId and appSecret', null);
+			console.log('auth error: check your appId and appSecret');
 			return;
 		}
 

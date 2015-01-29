@@ -210,4 +210,28 @@ describe('lib1self', function () {
     })
   })
 
+  it('returns a 401 as an auth error', function (done) {
+    var config = {
+    appId: 'appid'
+    , appSecret: 'appsecret'
+    , callbackUrl: 'callback'
+  };
+
+    nock('http://sandbox.1self.co')
+                  .post('/v1/streams')
+                  .reply(401
+                   , {
+                      streamid: '12345678'
+                      , writeToken: 'wt'
+                      , readToken: 'rt'
+                    }
+                   );
+
+    var success = function (error) {
+      expect(error).to.match(/auth error/);
+      done();
+    }
+
+    lib1self.createStream(config, success)
+  })
 })

@@ -218,6 +218,13 @@ function createStream (config, callback) {
 			callbackUrl: config.callbackUrl
 		}
 	}, function(e, response, body) {
+		console.log(response);
+		console.log(e);
+		if (response.statusCode === 401) {
+			callback('auth error: check your appId and appSecret', null);
+			return;
+		}
+
 		var stream = new Stream(config.server
 			, body.streamid
 			, body.writeToken
